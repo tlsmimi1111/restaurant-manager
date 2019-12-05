@@ -21,9 +21,6 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
 public abstract class AuditModel<U> implements Serializable {
-
-
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_at", updatable = false)
 	@CreatedDate
@@ -34,7 +31,7 @@ public abstract class AuditModel<U> implements Serializable {
 	@LastModifiedDate
 	private Date updatedAt;
 
-	@Column(name = "is_disabled", columnDefinition = "tinyint(1) default 0")
+	@Column(name = "is_disabled", columnDefinition = "int default 0")
 	private int isDisabled;
 	
 	@CreatedBy

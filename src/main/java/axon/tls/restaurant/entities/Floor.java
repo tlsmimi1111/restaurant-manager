@@ -13,23 +13,24 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import axon.tls.restaurant.config.Constants;
 
 @Entity
-@Table(name = "floor")
+@Table(name = "floors")
 @JsonFilter(Constants.FLOOR_FILTER)
 public class Floor extends AuditModel<String> {
-
-	
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "floor_name")
 	private String name;
 
+	@Column(name = "floor_size")
 	private int size;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -88,7 +89,5 @@ public class Floor extends AuditModel<String> {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 }

@@ -33,8 +33,7 @@ import axon.tls.restaurant.config.Constants;
 @Entity
 @JsonFilter(Constants.USER_FILTER)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
-		@UniqueConstraint(columnNames = { "email" }) })
+@Table(name = "users")
 
 public class User extends AuditModel<String> {
 
@@ -61,6 +60,7 @@ public class User extends AuditModel<String> {
 	}
 
 	@Id
+	@Column(name= "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -76,13 +76,12 @@ public class User extends AuditModel<String> {
 	@Size(min = 6, max = 100)
 	private String password;
 
-	@NaturalId
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false,unique = true)
 	@Size(max = 50)
 	@Email
 	private String email;
 
-	@Column
+	@Column(name = "user_name")
 	@Size(max = 150)
 	private String name;
 

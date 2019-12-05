@@ -27,18 +27,11 @@ public class Restaurant extends AuditModel<String> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	@Column(name = "name", nullable = false)
+	@Column(name = "restaurant_name", nullable = false)
 	private String name;
 	
 	@Column(name = "address")
@@ -65,6 +58,13 @@ public class Restaurant extends AuditModel<String> {
 		return floors;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 
 	public void setFloors(Set<Floor> floors) {

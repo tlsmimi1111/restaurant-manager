@@ -27,14 +27,13 @@ import axon.tls.restaurant.config.Constants;
 @JsonFilter(value = Constants.DESK_FILTER)
 public class Desk extends AuditModel<String> {
 
-
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -42,11 +41,14 @@ public class Desk extends AuditModel<String> {
 	@JoinColumn(name = "floor_id", nullable = false)
 	private Floor floor;
 
+	@Column(name = "desk_size")
 	private int size;
 
+	@Column(name = "desk_name")
 	private String name;
 
 	@Enumerated(EnumType.STRING)
+	@Column
 	private DeskState state;
 
 	public Desk(Desk desk) {
@@ -55,21 +57,17 @@ public class Desk extends AuditModel<String> {
 		this.state = desk.state;
 	}
 
-
 	public Desk() {
 		// TODO Auto-generated constructor stub
 	}
-
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public Floor getFloor() {
 		return floor;
