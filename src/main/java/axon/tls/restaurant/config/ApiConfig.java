@@ -8,15 +8,15 @@ public class ApiConfig {
 	public static final String LOGOUT = "/logout";
 	
 	public static final String URI_USERS_ALL = "/users";
-    public static final String URI_USERS_GETONE = "/user/{email}";
+    public static final String URI_CURRENT_USER_GET = "/currentUser";
     public static final String URI_USERS_CREATE = "/users/create";
     public static final String URI_USERS_PARSETOKEN = "/users/parseToken";
-    public static final String URI_USERS_UPDATE = "/users/update/{userEmail}";
+    public static final String URI_USERS_UPDATE = "/users/update/{userName}";
     public static final String URI_USERS_DELETE = "/users/delete/{userId}/{postId}";
     
     public static final String URI_RESTAURANT_CREATE = "/restaurants/create";
-    public static final String URI_RESTAURANT_GET_ALL = "/restaurants";
-    public static final String URI_RESTAURANT_UPDATE = "/restaurants/update/{restaurantId}";
+    public static final String URI_RESTAURANT_GET_ALL = "auth/restaurants";
+    public static final String URI_RESTAURANT_UPDATE = "restaurants/update/{restaurantId}";
     public static final String URI_RESTAURANT_DELETE_ONE = "/restaurants/delete/{restaurantId}";
     public static final String URI_RESTAURANT_GET_ONE = "/restaurants/{restaurantId}";
     public static final String URI_RESTAURANT_DISABLE_ONE = "/restaurants/disable";

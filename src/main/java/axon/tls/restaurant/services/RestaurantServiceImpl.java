@@ -84,6 +84,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Collection<Restaurant> getAllRestaurantsOfCurrentUser(Long userId) {
+		List<Restaurant> restaurants = restRepo.findByUserIdAndIsDisabled(userId, 0).orElseThrow(
+				()-> new ResourceNotFoundException("You do not have any restaurants yet")
+				);
+		
+		return restaurants;
+	}
 
 	
 	

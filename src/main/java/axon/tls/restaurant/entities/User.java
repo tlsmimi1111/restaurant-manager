@@ -103,12 +103,14 @@ public class User extends AuditModel<String> {
 
 	public User(User user) {
 		super();
+		this.id = user.id;
 		this.username = user.username;
 		this.email = user.email;
 		this.password = user.password;
 		this.phone = user.phone;
 		this.name = user.name;
 	}
+
 
 	public User(Long id, @Size(min = 3, max = 50) String username, @Size(max = 13) String phone,
 			@Size(min = 6, max = 100) String password, @Size(max = 50) @Email String email,

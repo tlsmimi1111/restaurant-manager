@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import axon.tls.restaurant.config.ApiConfig;
+import axon.tls.restaurant.entities.User;
 import axon.tls.restaurant.jwt.JwtTokenProvider;
 import axon.tls.restaurant.models.CustomUserDetails;
 import axon.tls.restaurant.models.LoginRequest;
@@ -38,6 +39,7 @@ public class AuthController {
                         loginRequest.getPassword()
                 )
         );
+        
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

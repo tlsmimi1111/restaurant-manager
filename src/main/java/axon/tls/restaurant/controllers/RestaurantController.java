@@ -28,6 +28,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import axon.tls.restaurant.config.Constants;
 import axon.tls.restaurant.entities.Restaurant;
+import axon.tls.restaurant.models.CustomUserDetails;
+import axon.tls.restaurant.services.provider.CurrentUser;
 import axon.tls.restaurant.services.provider.RestaurantService;
 import axon.tls.constant.RoleConstants;
 import axon.tls.restaurant.config.ApiConfig;
@@ -57,9 +59,11 @@ public class RestaurantController {
 	}
 	
 	@GetMapping(value =ApiConfig.URI_RESTAURANT_GET_ALL)
-//	@PreAuthorize("hasRole('" + RoleConstants.ROLE_ADMIN+ "')")
-	public ResponseEntity getAllRestaurants() {
-		MappingJacksonValue listRestaurants = this.filterData(restService.getAllRestaurants());
+	public ResponseEntity getAllRestaurants(@CurrentUser CustomUserDetails currentUser ) {
+	
+		
+		MappingJacksonValue listRestaurants = this.filterData
+				(restService.getAllRestaurantsOfCurrentUser(currentUser.getUser().getId()));
 		
 		return new ResponseEntity (listRestaurants,HttpStatus.OK);
 	}
@@ -98,10 +102,8 @@ public class RestaurantController {
 	private MappingJacksonValue filterData(Object RestaurantService) {
         MappingJacksonValue wrapper = new MappingJacksonValue(RestaurantService);
         FilterProvider filterProvider = new SimpleFilterProvider()
-                .addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.serializeAll())
-                .addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"))
-//                .addFilter(Constants.DESK_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"))
-                .addFilter(Constants.USER_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keepedFields));
+                .addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept("user"))
+                .addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"));
         wrapper.setFilters(filterProvider);
         return wrapper;
     }

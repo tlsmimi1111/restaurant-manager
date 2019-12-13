@@ -13,6 +13,8 @@ public interface RestaurantService {
   
   public abstract Restaurant deleteRestaurant(Long id);
   
+  public abstract Collection<Restaurant> getAllRestaurantsOfCurrentUser(Long userId);
+  
   public abstract Collection<Restaurant> getAllRestaurants();
   
   public abstract Restaurant getRestaurantById(Long id);
