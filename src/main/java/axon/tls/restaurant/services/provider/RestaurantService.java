@@ -7,7 +7,7 @@ import java.util.UUID;
 import axon.tls.restaurant.entities.Restaurant;
 
 public interface RestaurantService {
-  public abstract void createRestaurant(Restaurant restaurant);
+  public abstract Restaurant createRestaurant(Restaurant restaurant);
   
   public abstract Restaurant updateRestaurant(Long id, Restaurant restaurant);
   

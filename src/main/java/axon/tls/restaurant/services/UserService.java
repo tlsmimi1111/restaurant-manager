@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import axon.tls.restaurant.entities.User;
 import axon.tls.restaurant.models.CustomUserDetails;
 import axon.tls.restaurant.repository.UserRepository;
+import axon.tls.restaurant.services.provider.UserServiceProvider;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService, UserServiceProvider {
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -31,7 +33,6 @@ public class UserService implements UserDetailsService{
 	        return new CustomUserDetails(user);
 	    }
 
-	    // JWTAuthenticationFilter sẽ sử dụng hàm này
 	    @Transactional
 	    public UserDetails loadUserById(Long id) {
 	        User user = userRepository.findById(id).orElseThrow(
@@ -42,7 +43,20 @@ public class UserService implements UserDetailsService{
 	    }
 	    
 	    
-	    public User createUser(User user) {
+	    
+	    @Override
+		public User updateUser(Long id, User updateUser) {
+	    	   User user = userRepository.findById(id).orElseThrow(
+		                () -> new UsernameNotFoundException("User not found with id : " + id)
+		        );
+	    	   
+	    	   user.setName(updateUser.getName());
+	    	   user.setPhone(updateUser.getPhone());
+	    	   
+	    	   return userRepository.save(user);
+		}
+
+		public User createUser(User user) {
 	    	User newUser = new User(user);
 	    	
 	    	user.setPassword(passwordEncoder.encode(user.getPassword()));

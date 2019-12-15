@@ -25,7 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	UserRepository userRepo;
 	@Override
-	public void createRestaurant(Restaurant restaurant) {
+	public Restaurant createRestaurant(Restaurant restaurant) {
 		Restaurant newRest = new Restaurant(restaurant);
 		
 		
@@ -35,7 +35,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 		
 		newRest.setUser(user);
 		
-		restRepo.save(newRest);
+		return restRepo.save(newRest);
 	}
 	@Override
 	public Restaurant updateRestaurant(Long id, Restaurant restaurant) {

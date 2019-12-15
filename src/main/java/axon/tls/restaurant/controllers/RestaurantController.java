@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,8 +55,11 @@ public class RestaurantController {
 	
 	@PostMapping(value = ApiConfig.URI_RESTAURANT_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity createRestaurant(@RequestBody @Valid Restaurant restaurant) {
-		restService.createRestaurant(restaurant);
-		return new ResponseEntity ("Restaurant is created successfully",HttpStatus.CREATED);
+		
+		MappingJacksonValue newRestaurant = this.filterData
+				(restService.createRestaurant(restaurant));
+		
+		return new ResponseEntity (newRestaurant,HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value =ApiConfig.URI_RESTAURANT_GET_ALL)
@@ -75,18 +79,19 @@ public class RestaurantController {
 		
 	}
 	
-	@PutMapping(value = ApiConfig.URI_RESTAURANT_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_RESTAURANT_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity disableRestaurantById(@RequestBody @Valid Restaurant restaurant) {
 		Restaurant rest = restService.disableRestaurant(restaurant.getId());
 		if(rest != null) {
-		return new ResponseEntity("Restaurant is disabled successfully",HttpStatus.OK);
+		MappingJacksonValue disabledRestaurant = this.filterData(rest);
+		return new ResponseEntity(disabledRestaurant,HttpStatus.OK);
 		}
 		else {
 			return new ResponseEntity("Restaurant is not disabled successfully",HttpStatus.NOT_MODIFIED);
 		}
 	}
 	
-	@PutMapping(value = ApiConfig.URI_RESTAURANT_UPDATE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_RESTAURANT_UPDATE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateRestaurant(@PathVariable(value = "restaurantId") Long id,@RequestBody @Valid Restaurant rest) {
 		Restaurant restaurant = restService.updateRestaurant(id, rest);
 		

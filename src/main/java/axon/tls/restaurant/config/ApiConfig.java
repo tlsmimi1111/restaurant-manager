@@ -11,8 +11,8 @@ public class ApiConfig {
     public static final String URI_CURRENT_USER_GET = "/currentUser";
     public static final String URI_USERS_CREATE = "/users/create";
     public static final String URI_USERS_PARSETOKEN = "/users/parseToken";
-    public static final String URI_USERS_UPDATE = "/users/update/{userName}";
-    public static final String URI_USERS_DELETE = "/users/delete/{userId}/{postId}";
+    public static final String URI_USERS_UPDATE = "/users/update";
+    public static final String URI_USERS_DELETE = "/users/delete/{userId}";
     
     public static final String URI_RESTAURANT_CREATE = "/restaurants/create";
     public static final String URI_RESTAURANT_GET_ALL = "auth/restaurants";
