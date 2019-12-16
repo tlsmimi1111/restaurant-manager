@@ -18,6 +18,8 @@ public interface FloorService {
   public abstract Collection<Floor> getAllFloors();
   
   public abstract Floor getFloorById(Long id);
+  
+  public abstract Collection<Floor> getFloorByRestaurantId(Long restaurantId);
 
   public abstract Floor disableFloor(Long id);
 }

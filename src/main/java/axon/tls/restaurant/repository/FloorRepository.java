@@ -1,5 +1,6 @@
 package axon.tls.restaurant.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,5 @@ import axon.tls.restaurant.entities.Restaurant;
 @Repository
 public interface FloorRepository extends JpaRepository<Floor, Long>{
 	Optional<Floor> findByIdAndIsDisabled(Long id, Integer isDisabled);
+	List<Floor> findAllByRestaurantId(Long restaurantId);
 }

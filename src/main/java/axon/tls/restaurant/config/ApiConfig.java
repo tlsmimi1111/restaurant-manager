@@ -27,6 +27,7 @@ public class ApiConfig {
     public static final String URI_FLOOR_DELETE_ONE = "/floors/delete/{floorId}";
     public static final String URI_FLOOR_GET_ONE = "/floors/{floorId}";
     public static final String URI_FLOOR_DISABLE_ONE = "/floors/disable";
+    public static final String URI_FLOOR_GET_BY_RESTAURANT_ID = "/floorsBy/{restaurantId}";
     
     public static final String URI_DESK_CREATE = "/desks/create";
     public static final String URI_DESK_GET_ALL = "/desks";

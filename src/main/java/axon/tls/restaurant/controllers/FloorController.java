@@ -101,6 +101,14 @@ public class FloorController {
 		}
 	}
 	
+	@GetMapping(value = ApiConfig.URI_FLOOR_GET_BY_RESTAURANT_ID)
+	public ResponseEntity getFloorsByRestaurantId(@PathVariable(value="restaurantId") Long restaurantId) {
+		MappingJacksonValue floors = this.filterData(this.floorService.getFloorByRestaurantId(restaurantId));
+		
+		return new ResponseEntity(floors,HttpStatus.OK);
+		
+	}
+	
 	private MappingJacksonValue filterData(Object FloorService) {
         MappingJacksonValue wrapper = new MappingJacksonValue(FloorService);
         FilterProvider filterProvider = new SimpleFilterProvider()

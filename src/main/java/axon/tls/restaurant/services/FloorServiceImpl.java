@@ -1,5 +1,6 @@
 package axon.tls.restaurant.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +56,13 @@ public class FloorServiceImpl implements FloorService {
 
 		return floorRepo.save(floor);
 
+	}
+
+	@Override
+	public Collection<Floor> getFloorByRestaurantId(Long restaurantId) {
+		List<Floor> floors = floorRepo.findAllByRestaurantId(restaurantId);
+		
+		return floors;
 	}
 
 	@Override
