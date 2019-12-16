@@ -5,13 +5,19 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import axon.tls.restaurant.entities.Desk;
 import axon.tls.restaurant.entities.DeskState;
 import axon.tls.restaurant.entities.Floor;
 import axon.tls.restaurant.entities.Restaurant;
 import axon.tls.restaurant.entities.User;
+import axon.tls.restaurant.exception.BadRequestException;
 import axon.tls.restaurant.exception.ResourceNotFoundException;
 import axon.tls.restaurant.repository.DeskRepository;
 import axon.tls.restaurant.repository.FloorRepository;
@@ -48,6 +54,27 @@ public class DeskServiceImpl implements DeskService {
 		deskRepo.save(newDesk);
 	}
 	
+	@Override
+	public Page<Desk> getDeksByRestaurantId(Long retaurantId, int pageNumber, int size) {
+		validatePageNumberAndSize(pageNumber);
+		Pageable pageable = PageRequest.of(pageNumber, size,Sort.Direction.DESC,"createdAt");
+		
+		return this.deskRepo.findByFloorRestaurantId(retaurantId, pageable);
+	}
+
+	 public String validatePageNumberAndSize(int pageNumber) {
+	        if (pageNumber < 0) {
+	            throw new BadRequestException("Page number cannot be less than one.");
+	        }
+	        return "";
+	    }
+
+	@Override
+	public Collection<Desk> getDeksByRestaurantIdRaw(Long restaurantId) {
+		// TODO Auto-generated method stub
+		return this.deskRepo.findByFloorRestaurantId(restaurantId);
+	}
+
 	@Override
 	public Desk updateDesk(Long id, Desk deskRequest) {
 		Desk desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));

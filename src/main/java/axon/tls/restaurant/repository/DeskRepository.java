@@ -17,8 +17,7 @@ import axon.tls.restaurant.entities.Restaurant;
 @Repository
 public interface DeskRepository extends JpaRepository<Desk, Long>{
 	Optional<Desk> findByIdAndIsDisabled(Long id, Integer isDisabled);
-//	 Page<Post> findByUserIdAndIsDeleteOrderByStatusAscCreatedAtDesc(Long userId, Integer isDelete, Pageable pageable);
-	@Transactional(timeout = 15)
-	Page<Desk> findAllByFloorRestaurantId(Long  id,Pageable pageable);
+	Page<Desk>findByFloorRestaurantId(Long retaurantId,Pageable pageable);
 	Long countByFloorId(Long id);
+	List<Desk>findByFloorRestaurantId(Long retaurantId);
 }

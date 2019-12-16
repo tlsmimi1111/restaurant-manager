@@ -35,5 +35,6 @@ public class ApiConfig {
     public static final String URI_DESK_DELETE_ONE = "/desks/delete/{deskId}";
     public static final String URI_DESK_GET_ONE = "/desks/{deskId}";
     public static final String URI_DESK_DISABLE_ONE = "/desks/disable";
+    public static final String URI_GET_DESK_BY_RESTAURANT_ID  = "/desksByRestaurant";
     
 }
