@@ -1,5 +1,7 @@
 package axon.tls.restaurant.entities;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -41,12 +44,26 @@ public class Desk extends AuditModel<String> {
 	@JoinColumn(name = "floor_id", nullable = false)
 	private Floor floor;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "desk")
+	private Set<Bill> bills = new HashSet<>();
+	
 	@Column(name = "desk_size")
 	private int size;
 
+	public Set<Bill> getBills() {
+		return bills;
+	}
+
+	public void setBills(Set<Bill> bills) {
+		this.bills = bills;
+	}
+
 	@Column(name = "desk_name")
 	private String name;
-
+	
+	@Column(name="desk_order")
+	private int order;
+	
 	@Enumerated(EnumType.STRING)
 	@Column
 	private DeskState state;
@@ -55,6 +72,7 @@ public class Desk extends AuditModel<String> {
 		this.size = desk.size;
 		this.name = desk.name;
 		this.state = desk.state;
+		this.order = desk.order;
 	}
 
 	public Desk() {
@@ -63,6 +81,14 @@ public class Desk extends AuditModel<String> {
 
 	public Long getId() {
 		return id;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	public void setId(Long id) {

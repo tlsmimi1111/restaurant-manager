@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,8 +60,8 @@ public class FloorController {
 	
 	@PostMapping(value = ApiConfig.URI_FLOOR_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity createFloor(@RequestBody @Valid Floor floorRequest) {
-		floorService.createFloor(floorRequest);
-		return new ResponseEntity ("Floor is created successfully",HttpStatus.CREATED);
+		MappingJacksonValue newFloor =  this.filterData(floorService.createFloor(floorRequest));
+		return new ResponseEntity (newFloor,HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value =ApiConfig.URI_FLOOR_GET_ALL)
@@ -77,18 +78,19 @@ public class FloorController {
 		
 	}
 	
-	@PutMapping(value = ApiConfig.URI_FLOOR_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_FLOOR_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity disableFloorById(@RequestBody @Valid Floor floorRequest) {
 		Floor floor = floorService.disableFloor(floorRequest.getId());
+		MappingJacksonValue disabledFloor = this.filterData(floor);
 		if(floor != null) {
-		return new ResponseEntity("Floor is disabled successfully",HttpStatus.OK);
+		return new ResponseEntity(disabledFloor,HttpStatus.OK);
 		}
 		else {
 			return new ResponseEntity("Floor is not disabled successfully",HttpStatus.NOT_MODIFIED);
 		}
 	}
 	
-	@PutMapping(value = ApiConfig.URI_FLOOR_UPDATE,consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_FLOOR_UPDATE,consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateFloor(@PathVariable(value = "floorId") Long id,@RequestBody @Valid Floor floorRequest) {
 		Floor floor = floorService.updateFloor(id, floorRequest);
 		

@@ -18,6 +18,6 @@ import axon.tls.restaurant.entities.Restaurant;
 public interface DeskRepository extends JpaRepository<Desk, Long>{
 	Optional<Desk> findByIdAndIsDisabled(Long id, Integer isDisabled);
 	Page<Desk>findByFloorRestaurantId(Long retaurantId,Pageable pageable);
-	Long countByFloorId(Long id);
-	List<Desk>findByFloorRestaurantId(Long retaurantId);
+	Integer countByFloorId(Long id);
+	List<Desk>findByFloorRestaurantIdAndIsDisabled(Long retaurantId,Integer isDisabled);
 }

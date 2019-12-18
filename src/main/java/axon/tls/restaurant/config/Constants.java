@@ -14,6 +14,9 @@ public class Constants {
 	public static final String USER_FILTER = "userFilter";
 	public static final String FLOOR_FILTER = "floorFilter";
 	public static final String DESK_FILTER = "deskFilter";
+	public static final String FOOD_ITEM_FILTER = "foodItemFilter";
+	public static final String ROW_ITEM_FILTER = "rowItemFilter";
+	public static final String BILL_FILTER = "billFilter";
 
 	public static final Integer NOT_DELETED = 0;
 	public static final String SECRET = "burningTeamSecret";

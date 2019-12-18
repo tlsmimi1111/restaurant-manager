@@ -12,5 +12,5 @@ import axon.tls.restaurant.entities.Restaurant;
 @Repository
 public interface FloorRepository extends JpaRepository<Floor, Long>{
 	Optional<Floor> findByIdAndIsDisabled(Long id, Integer isDisabled);
-	List<Floor> findAllByRestaurantId(Long restaurantId);
+	List<Floor> findAllByRestaurantIdAndIsDisabled(Long restaurantId, Integer isDisabled);
 }

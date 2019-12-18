@@ -1,0 +1,98 @@
+package axon.tls.restaurant.services;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import axon.tls.restaurant.entities.Bill;
+import axon.tls.restaurant.entities.Desk;
+import axon.tls.restaurant.entities.RowItem;
+import axon.tls.restaurant.exception.ResourceNotFoundException;
+import axon.tls.restaurant.models.BillState;
+import axon.tls.restaurant.repository.BillRepository;
+import axon.tls.restaurant.repository.DeskRepository;
+import axon.tls.restaurant.services.provider.BillService;
+
+@Service
+public class BillServiceImpl implements BillService {
+
+	@Autowired
+	BillRepository billRepo;
+	
+	@Autowired
+	DeskRepository deskRepo;
+	
+	@Override
+	public Bill createBill(Bill bill) {
+		Bill newBill = new Bill();
+		
+		Desk desk = deskRepo.findByIdAndIsDisabled(bill.getDesk().getId(), 0)
+				.orElseThrow(() -> new ResourceNotFoundException("desk with "+ bill.getDesk().getId()+" not found"));
+		
+		
+		newBill.setDesk(desk);
+		newBill.setState(BillState.UNPAID);
+		
+		
+		return billRepo.save(newBill);
+	}
+	
+	@Override
+	public Bill getBillById(Long id) {
+		// TODO Auto-generated method stub
+		Bill bill = new Bill();
+		
+		bill = billRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("bill "+id+"not found"));
+		
+		int total = 0;
+		for (RowItem rowItem : bill.getRowItems()) {
+			int rowItemMoney = rowItem.getItem().getPrice() * rowItem.getQuantity();
+			total+= rowItemMoney;
+		}
+		bill.setTotal(total);
+		return bill;
+	}
+	
+	@Override
+	public Bill updateBill(Long id, Bill billRequest) {
+		Bill bill = billRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("bill with"+id+"not found"));
+		
+		if(bill == null) {
+			return null;
+		}
+		
+		bill.setState(billRequest.getState());
+		
+		return billRepo.save(bill);
+		
+	}
+
+	@Override
+	public Bill disableBill(Long id) {
+		Bill bill = billRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("bill with"+id+"not found"));
+
+		if(bill == null) {
+			return null;
+		}
+		
+		bill.setIsDisabled(1);
+		
+		
+		return billRepo.save(bill);
+	}
+
+	@Override
+	public Bill getBillByDeskId(Long deskId) {
+		// TODO Auto-generated method stub
+		Bill bill =  billRepo.findFirstByStateAndDeskId(BillState.UNPAID, deskId).orElseThrow(()-> new ResourceNotFoundException("bill with"+deskId+"not found"));
+		if(bill != null ) {
+			int total = 0;
+			for (RowItem rowItem : bill.getRowItems()) {
+				int rowItemMoney = rowItem.getItem().getPrice() * rowItem.getQuantity();
+				total+= rowItemMoney;
+			}
+			bill.setTotal(total);
+		}
+		return bill;
+	}
+}

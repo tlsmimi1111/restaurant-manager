@@ -27,7 +27,7 @@ public class FloorServiceImpl implements FloorService {
 	RestaurantRepository restaurantRepo;
 
 	@Override
-	public void createFloor(Floor floor) {
+	public Floor createFloor(Floor floor) {
 		Floor newFloor = new Floor(floor);
 
 		Restaurant rest = restaurantRepo.findByIdAndIsDisabled(floor.getRestaurant().getId(), 0)
@@ -35,7 +35,7 @@ public class FloorServiceImpl implements FloorService {
 		
 		newFloor.setRestaurant(rest);
 
-		floorRepo.save(newFloor);
+		return floorRepo.save(newFloor);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class FloorServiceImpl implements FloorService {
 
 	@Override
 	public Collection<Floor> getFloorByRestaurantId(Long restaurantId) {
-		List<Floor> floors = floorRepo.findAllByRestaurantId(restaurantId);
+		List<Floor> floors = floorRepo.findAllByRestaurantIdAndIsDisabled(restaurantId,0);
 		
 		return floors;
 	}

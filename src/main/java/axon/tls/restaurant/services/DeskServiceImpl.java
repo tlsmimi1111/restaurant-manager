@@ -36,7 +36,7 @@ public class DeskServiceImpl implements DeskService {
 	FloorRepository floorRepo;
 
 	@Override
-	public void createDesk(Desk desk) {
+	public Desk createDesk(Desk desk) {
 		Desk newDesk = new Desk();
 		String deskName;
 		
@@ -44,14 +44,55 @@ public class DeskServiceImpl implements DeskService {
 				.orElseThrow(() -> new ResourceNotFoundException("floor with "+ desk.getFloor().getId()+" not found"));
 		
 		
-		Long totalDeskInAfloor = deskRepo.countByFloorId(desk.getFloor().getId());
+		Integer totalDeskInAfloor = deskRepo.countByFloorId(desk.getFloor().getId());
 		
-		deskName = floor.getName() + "_" + totalDeskInAfloor;
+		deskName = floor.getName();
 		newDesk.setFloor(floor);
 		newDesk.setState(DeskState.AVAILABLE);
 		newDesk.setName(deskName);
+		newDesk.setOrder(totalDeskInAfloor);
 		
-		deskRepo.save(newDesk);
+		return deskRepo.save(newDesk);
+	}
+	
+	@Override
+	public Desk getDeskById(Long id) {
+		// TODO Auto-generated method stub
+		Desk desk = new Desk();
+		
+		desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
+		
+		return desk;
+	}
+	
+	@Override
+	public Desk disableDesk(Long id) {
+		Desk desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
+
+		if(desk == null) {
+			return null;
+		}
+		
+		desk.setIsDisabled(1);
+		
+		
+		return deskRepo.save(desk);
+	}
+	
+	@Override
+	public Desk updateDesk(Long id, Desk deskRequest) {
+		Desk desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
+		
+		if(desk == null) {
+			return null;
+		}
+		
+		desk.setSize(deskRequest.getSize()==0?desk.getSize():deskRequest.getSize());
+		desk.setName(deskRequest.getName() == null?desk.getName():deskRequest.getName());
+		desk.setState(deskRequest.getState() == null?desk.getState():deskRequest.getState());
+		
+		return deskRepo.save(desk);
+		
 	}
 	
 	@Override
@@ -72,52 +113,17 @@ public class DeskServiceImpl implements DeskService {
 	@Override
 	public Collection<Desk> getDeksByRestaurantIdRaw(Long restaurantId) {
 		// TODO Auto-generated method stub
-		return this.deskRepo.findByFloorRestaurantId(restaurantId);
-	}
-
-	@Override
-	public Desk updateDesk(Long id, Desk deskRequest) {
-		Desk desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
-		
-		if(desk == null) {
-			return null;
-		}
-		
-		desk.setSize(deskRequest.getSize()==0?desk.getSize():deskRequest.getSize());
-		desk.setName(deskRequest.getName() == null?desk.getName():deskRequest.getName());
-		desk.setState(deskRequest.getState() == null?desk.getState():deskRequest.getState());
-		
-		return deskRepo.save(desk);
-		
+		return this.deskRepo.findByFloorRestaurantIdAndIsDisabled(restaurantId,0);
 	}
 	
-	@Override
-	public Desk disableDesk(Long id) {
-		Desk desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
 
-		if(desk == null) {
-			return null;
-		}
-		
-		desk.setIsDisabled(1);
-		
-		
-		return deskRepo.save(desk);
-	}
 	@Override
 	public Collection<Desk> getAllDesks() {
 		// TODO Auto-generated method stub
 		return deskRepo.findAll();
 	}
-	@Override
-	public Desk getDeskById(Long id) {
-		// TODO Auto-generated method stub
-		Desk desk = new Desk();
-		
-		desk = deskRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("desk"+id+"not found"));
-		
-		return desk;
-	}
+
+	
 	@Override
 	public Desk deleteDesk(Long id) {
 		// TODO Auto-generated method stub

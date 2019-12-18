@@ -14,6 +14,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -61,7 +62,6 @@ public class DeskController {
 		this.keptFloorFields.add("size");
 		this.keptFloorFields.add("name");
 		this.keptFloorFields.add("id");
-
 	}
 
 	@Autowired
@@ -69,8 +69,8 @@ public class DeskController {
 
 	@PostMapping(value = ApiConfig.URI_DESK_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity createDesk(@RequestBody @Valid Desk deskRequest) {
-		deskService.createDesk(deskRequest);
-		return new ResponseEntity("Desk is created successfully", HttpStatus.CREATED);
+		MappingJacksonValue newDesk =  this.filterData(deskService.createDesk(deskRequest));
+		return new ResponseEntity(newDesk, HttpStatus.CREATED);
 	}
 
 	@GetMapping(value = ApiConfig.URI_DESK_GET_ALL)
@@ -87,17 +87,17 @@ public class DeskController {
 
 	}
 
-	@PutMapping(value = ApiConfig.URI_DESK_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_DESK_DISABLE_ONE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity disableDeskById(@RequestBody @Valid Desk deskRequest) {
 		Desk desk = deskService.disableDesk(deskRequest.getId());
 		if (desk != null) {
-			return new ResponseEntity("Desk is disabled successfully", HttpStatus.OK);
+			return new ResponseEntity(desk, HttpStatus.OK);
 		} else {
 			return new ResponseEntity("Desk is not disabled successfully", HttpStatus.NOT_MODIFIED);
 		}
 	}
 
-	@PutMapping(value = ApiConfig.URI_DESK_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = ApiConfig.URI_DESK_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity updateDesk(@PathVariable(value = "deskId") Long id, @RequestBody Desk deskRequest) {
 		Desk desk = deskService.updateDesk(id, deskRequest);
 
@@ -127,9 +127,8 @@ public class DeskController {
 		MappingJacksonValue wrapper = new MappingJacksonValue(DeskService);
 		FilterProvider filterProvider = new SimpleFilterProvider()
 				.addFilter(Constants.DESK_FILTER, SimpleBeanPropertyFilter.serializeAll())
+				.addFilter(Constants.BILL_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 				.addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptFloorFields));
-//                .addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptRestaurantFields))
-//                .addFilter(Constants.USER_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptUserFields));
 		wrapper.setFilters(filterProvider);
 		return wrapper;
 	}

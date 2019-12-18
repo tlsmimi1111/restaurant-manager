@@ -9,7 +9,7 @@ import axon.tls.restaurant.entities.Floor;
 
 
 public interface FloorService {
-  public abstract void createFloor(Floor floor);
+  public abstract Floor createFloor(Floor floor);
   
   public abstract Floor updateFloor(Long id, Floor floor);
   

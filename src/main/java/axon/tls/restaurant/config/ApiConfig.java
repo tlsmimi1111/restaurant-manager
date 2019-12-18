@@ -37,4 +37,25 @@ public class ApiConfig {
     public static final String URI_DESK_DISABLE_ONE = "/desks/disable";
     public static final String URI_GET_DESK_BY_RESTAURANT_ID  = "/desksByRestaurant";
     
+    public static final String URI_ITEM_CREATE = "/items/create";
+    public static final String URI_ITEM_GET_ALL = "/items";
+    public static final String URI_ITEM_UPDATE = "/items/update/{itemId}";
+    public static final String URI_ITEM_GET_ONE = "/items/{itemId}";
+    public static final String URI_ITEM_DISABLE_ONE = "/items/disable";
+    public static final String URI_GET_ITEM_BY_RESTAURANT_ID  = "/itemsByRestaurant";
+    
+    public static final String URI_ROW_ITEM_CREATE = "/rowItems/create";
+    public static final String URI_ROW_ITEM_GET_ALL = "/rowItems";
+    public static final String URI_ROW_ITEM_UPDATE = "/rowItems/update/{rowItemId}";
+    public static final String URI_ROW_ITEM_GET_ONE = "/rowItems/{rowItemId}";
+    public static final String URI_ROW_ITEM_DISABLE_ONE = "/rowItems/disable";
+    public static final String URI_GET_ROW_ITEM_BY_BILL_ID  = "/rowItemsByBill";
+    
+    public static final String URI_BILL_CREATE = "/bills/create";
+    public static final String URI_BILL_GET_ALL = "/bills";
+    public static final String URI_BILL_UPDATE = "/bills/update/{billId}";
+    public static final String URI_BILL_GET_ONE = "/bills/{billId}";
+    public static final String URI_BILL_DISABLE_ONE = "/bills/disable";
+    public static final String URI_GET_BILL_BY_DESK_ID  = "/billsByDesk";
+    
 }

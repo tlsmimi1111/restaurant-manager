@@ -84,6 +84,17 @@ public class User extends AuditModel<String> {
 	@Column(name = "user_name")
 	@Size(max = 150)
 	private String name;
+	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	@Column(name="avatar_url")
+	private String avatar;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Restaurant> restaurants = new HashSet<>();

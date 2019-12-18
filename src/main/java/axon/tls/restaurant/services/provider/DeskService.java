@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import axon.tls.restaurant.entities.Restaurant;
 
 public interface DeskService {
-  public abstract void createDesk(Desk desk);
+  public abstract Desk createDesk(Desk desk);
   
   public abstract Desk updateDesk(Long id, Desk desk);
   

@@ -43,6 +43,17 @@ public class Restaurant extends AuditModel<String> {
 	
 	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY, mappedBy = "restaurant")
 	private Set<Floor> floors = new HashSet<>();
+	
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY, mappedBy = "restaurant")
+	private Set<FoodItem> foodItems = new HashSet<>();
+
+	public Set<FoodItem> getFoodItems() {
+		return foodItems;
+	}
+
+	public void setFoodItems(Set<FoodItem> foodItems) {
+		this.foodItems = foodItems;
+	}
 
 	public Restaurant() {
 		super();
