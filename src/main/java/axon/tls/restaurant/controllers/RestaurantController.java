@@ -107,7 +107,7 @@ public class RestaurantController {
 	private MappingJacksonValue filterData(Object RestaurantService) {
         MappingJacksonValue wrapper = new MappingJacksonValue(RestaurantService);
         FilterProvider filterProvider = new SimpleFilterProvider()
-                .addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept("user"))
+                .addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.serializeAllExcept("user","foodItems"))
                 .addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"));
         wrapper.setFilters(filterProvider);
         return wrapper;
