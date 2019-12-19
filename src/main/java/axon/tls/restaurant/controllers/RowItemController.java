@@ -53,7 +53,7 @@ public class RowItemController {
 		RowItem rowItem = rowItemService.disableRowItem(rowItemRequest.getId());
 		MappingJacksonValue disabledRowItem = this.filterData(rowItem);
 		if(rowItem != null) {
-		return new ResponseEntity(disabledRowItem,HttpStatus.OK);
+		return new ResponseEntity(this.filterData(disabledRowItem),HttpStatus.OK);
 		}
 		else {
 			return new ResponseEntity("row item is not disabled successfully",HttpStatus.NOT_MODIFIED);

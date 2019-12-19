@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import axon.tls.restaurant.config.ApiConfig;
 import axon.tls.restaurant.config.Constants;
-import axon.tls.restaurant.entities.Desk;
 import axon.tls.restaurant.entities.FoodItem;
 import axon.tls.restaurant.services.provider.FoodItemService;
 
@@ -62,7 +60,7 @@ public class FoodItemController {
 	public ResponseEntity disableFoodItemById(@RequestBody @Valid FoodItem foodItemRequest) {
 		FoodItem foodItem = itemService.disableFoodItem(foodItemRequest.getId());
 		if (foodItem != null) {
-			return new ResponseEntity(foodItem, HttpStatus.OK);
+			return new ResponseEntity(this.filterData(foodItem), HttpStatus.OK);
 		} else {
 			return new ResponseEntity("food item is not disabled successfully", HttpStatus.NOT_MODIFIED);
 		}
@@ -89,7 +87,7 @@ public class FoodItemController {
 	private MappingJacksonValue filterData(Object itemService) {
 		MappingJacksonValue wrapper = new MappingJacksonValue(itemService);
 		FilterProvider filterProvider = new SimpleFilterProvider()
-				.addFilter(Constants.FOOD_ITEM_FILTER, SimpleBeanPropertyFilter.serializeAllExcept("bills"))
+				.addFilter(Constants.FOOD_ITEM_FILTER, SimpleBeanPropertyFilter.serializeAllExcept("rowItems"))
 				.addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptRestaurantFields));
 		wrapper.setFilters(filterProvider);
 		return wrapper;

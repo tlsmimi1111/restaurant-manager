@@ -51,12 +51,12 @@ public class User extends AuditModel<String> {
 		User user = (User) o;
 		return Objects.equals(id, user.id) && Objects.equals(phone, user.phone)
 				&& Objects.equals(username, user.username) && Objects.equals(password, user.password)
-				&& Objects.equals(email, user.email) && Objects.equals(name, user.name);
+				&& Objects.equals(email, user.email) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, phone, username, password, email, name);
+		return Objects.hash(id, phone, username, password, email,lastName,firstName);
 	}
 
 	@Id
@@ -81,12 +81,32 @@ public class User extends AuditModel<String> {
 	@Email
 	private String email;
 
-	@Column(name = "user_name")
+	@Column(name = "first_name")
 	@Size(max = 150)
-	private String name;
+	private String firstName;
+	
+	@Column(name = "last_name")
+	@Size(max = 150)
+	private String lastName;
 	
 	public String getAvatar() {
 		return avatar;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public void setAvatar(String avatar) {
@@ -119,20 +139,27 @@ public class User extends AuditModel<String> {
 		this.email = user.email;
 		this.password = user.password;
 		this.phone = user.phone;
-		this.name = user.name;
+		this.lastName = user.lastName;
+		this.firstName = user.firstName;
+		this.avatar = user.avatar;
 	}
 
 
+	
+
 	public User(Long id, @Size(min = 3, max = 50) String username, @Size(max = 13) String phone,
 			@Size(min = 6, max = 100) String password, @Size(max = 50) @Email String email,
-			@Size(max = 150) String name, Set<Restaurant> restaurants, Set<RoleEntity> roles) {
+			@Size(max = 150) String firstName, @Size(max = 150) String lastName, String avatar,
+			Set<Restaurant> restaurants, Set<RoleEntity> roles) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.phone = phone;
 		this.password = password;
 		this.email = email;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.avatar = avatar;
 		this.restaurants = restaurants;
 		this.roles = roles;
 	}
@@ -194,11 +221,11 @@ public class User extends AuditModel<String> {
 	}
 
 	public String getName() {
-		return name;
+		return lastName;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.lastName = name;
 	}
 
 }

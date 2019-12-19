@@ -48,7 +48,7 @@ public class FoodItemServiceImpl implements FoodItemService{
 			foodItem.setPrice(updatedFoodItem.getPrice());
 		}
 		
-		return null;
+		return foodItem;
 	}
 
 	@Override

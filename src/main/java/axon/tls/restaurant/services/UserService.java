@@ -50,7 +50,8 @@ public class UserService implements UserDetailsService, UserServiceProvider {
 		                () -> new UsernameNotFoundException("User not found with id : " + id)
 		        );
 	    	   
-	    	   user.setName(updateUser.getName());
+	    	   user.setFirstName(updateUser.getFirstName());
+	    	   user.setLastName(updateUser.getLastName());
 	    	   user.setPhone(updateUser.getPhone());
 	    	   
 	    	   return userRepository.save(user);

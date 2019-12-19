@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 
 import axon.tls.restaurant.entities.Bill;
 import axon.tls.restaurant.entities.Desk;
+import axon.tls.restaurant.entities.DeskState;
 import axon.tls.restaurant.entities.RowItem;
 import axon.tls.restaurant.exception.ResourceNotFoundException;
 import axon.tls.restaurant.models.BillState;
 import axon.tls.restaurant.repository.BillRepository;
 import axon.tls.restaurant.repository.DeskRepository;
 import axon.tls.restaurant.services.provider.BillService;
+import axon.tls.restaurant.services.provider.DeskService;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -21,6 +23,9 @@ public class BillServiceImpl implements BillService {
 	
 	@Autowired
 	DeskRepository deskRepo;
+	
+	@Autowired
+	DeskService deskService;
 	
 	@Override
 	public Bill createBill(Bill bill) {
@@ -33,6 +38,9 @@ public class BillServiceImpl implements BillService {
 		newBill.setDesk(desk);
 		newBill.setState(BillState.UNPAID);
 		
+		Desk occupiedDesk = new Desk();
+		occupiedDesk.setState(DeskState.OCCUPIED);
+		deskService.updateDesk(bill.getDesk().getId(), occupiedDesk);
 		
 		return billRepo.save(newBill);
 	}
@@ -59,6 +67,12 @@ public class BillServiceImpl implements BillService {
 		
 		if(bill == null) {
 			return null;
+		}
+		
+		if(billRequest.getState() == BillState.PAID) {
+			Desk occupiedDesk = new Desk();
+			occupiedDesk.setState(DeskState.AVAILABLE);
+			deskService.updateDesk(bill.getDesk().getId(), occupiedDesk);
 		}
 		
 		bill.setState(billRequest.getState());

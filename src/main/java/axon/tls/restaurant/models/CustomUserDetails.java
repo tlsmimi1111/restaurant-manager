@@ -38,6 +38,7 @@ public class CustomUserDetails implements UserDetails {
 		return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
+	
 	  @Override
 	    public String getPassword() {
 	        return user.getPassword();

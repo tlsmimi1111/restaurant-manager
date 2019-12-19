@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.google.j2objc.annotations.AutoreleasePool;
 
 import axon.tls.restaurant.config.ApiConfig;
 import axon.tls.restaurant.config.Constants;
 import axon.tls.restaurant.entities.Bill;
+import axon.tls.restaurant.entities.Desk;
+import axon.tls.restaurant.entities.DeskState;
 import axon.tls.restaurant.entities.RowItem;
 import axon.tls.restaurant.services.provider.BillService;
+import axon.tls.restaurant.services.provider.DeskService;
 
 @RestController
 @CrossOrigin
@@ -34,6 +38,9 @@ public class BillController {
 
 	@Autowired
 	BillService billService;
+	
+	@Autowired
+	DeskService deskService;
 	
 	@PostMapping(value = ApiConfig.URI_BILL_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity createBill(@RequestBody @Valid Bill billRequest) {
