@@ -57,5 +57,7 @@ public class ApiConfig {
     public static final String URI_BILL_GET_ONE = "/bills/{billId}";
     public static final String URI_BILL_DISABLE_ONE = "/bills/disable";
     public static final String URI_GET_BILL_BY_DESK_ID  = "/billsByDesk";
+    public static final String URI_GET_BILL_BY_YEAR_AND_RESTAURANT_ID = "/bills/{restaurantId}/{year}";
+    
     
 }

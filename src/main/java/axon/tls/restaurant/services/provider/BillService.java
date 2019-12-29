@@ -14,6 +14,8 @@ public interface BillService {
 	  public abstract Bill getBillById(Long id);
 	  
 	  public abstract Bill getBillByDeskId(Long deskId);
+	  
+	  public abstract Collection<Bill> getAllPaidBillByYearAndRestaurantId(Integer year,Long restaurantId);
  
 	
 	

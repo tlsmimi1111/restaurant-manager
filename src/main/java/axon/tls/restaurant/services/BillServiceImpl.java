@@ -1,12 +1,17 @@
 package axon.tls.restaurant.services;
 
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.math.Quantiles;
 
 import axon.tls.restaurant.entities.Bill;
 import axon.tls.restaurant.entities.Desk;
 import axon.tls.restaurant.entities.DeskState;
+import axon.tls.restaurant.entities.FoodItem;
 import axon.tls.restaurant.entities.RowItem;
 import axon.tls.restaurant.exception.ResourceNotFoundException;
 import axon.tls.restaurant.models.BillState;
@@ -64,7 +69,7 @@ public class BillServiceImpl implements BillService {
 	@Override
 	public Bill updateBill(Long id, Bill billRequest) {
 		Bill bill = billRepo.findByIdAndIsDisabled(id, 0).orElseThrow(()-> new ResourceNotFoundException("bill with"+id+"not found"));
-		
+		int total = 0;
 		if(bill == null) {
 			return null;
 		}
@@ -73,12 +78,24 @@ public class BillServiceImpl implements BillService {
 			Desk occupiedDesk = new Desk();
 			occupiedDesk.setState(DeskState.AVAILABLE);
 			deskService.updateDesk(bill.getDesk().getId(), occupiedDesk);
-		}
-		
+			for (RowItem rowItem : bill.getRowItems()) {
+				FoodItem foodItem = rowItem.getItem();
+				total += (foodItem.getPrice()* rowItem.getQuantity());
+			}
+			bill.setTotal(total);
+			}
+	
 		bill.setState(billRequest.getState());
 		
 		return billRepo.save(bill);
 		
+	}
+
+	@Override
+	public Collection<Bill> getAllPaidBillByYearAndRestaurantId( Integer year,Long restaurantId) {
+		
+		// TODO Auto-generated method stub
+		return billRepo.findAllBillByYear(year,BillState.PAID, restaurantId);
 	}
 
 	@Override

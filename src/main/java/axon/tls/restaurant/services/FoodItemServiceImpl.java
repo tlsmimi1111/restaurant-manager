@@ -22,15 +22,18 @@ public class FoodItemServiceImpl implements FoodItemService{
 	RestaurantRepository restRep;
 	
 	@Override
-	public FoodItem createFoodItem(FoodItem itemRequest) {
+	public FoodItem createFoodItem(FoodItem itemRequest,Long restaurantId) {
 		FoodItem newFoodItem = new FoodItem();
 		
-		Restaurant restaurant = restRep.findByIdAndIsDisabled(itemRequest.getRestaurant().getId(), 0)
+		Restaurant restaurant = restRep.findByIdAndIsDisabled(restaurantId, 0)
 				.orElseThrow(() -> new ResourceNotFoundException("Restaurant with "+ itemRequest.getRestaurant().getId()+" not found"));
 		
 		newFoodItem.setName(itemRequest.getName());
 		newFoodItem.setPrice(itemRequest.getPrice());
 		newFoodItem.setRestaurant(restaurant);
+		if(itemRequest.getImage_url() != null) {
+			newFoodItem.setImage_url(itemRequest.getImage_url());
+		}
 		
 		
 		return itemRepo.save(newFoodItem);
@@ -47,8 +50,11 @@ public class FoodItemServiceImpl implements FoodItemService{
 		if(updatedFoodItem.getPrice()!=0) {
 			foodItem.setPrice(updatedFoodItem.getPrice());
 		}
+		if(updatedFoodItem.getImage_url() !=null) {
+			foodItem.setImage_url(updatedFoodItem.getImage_url());
+		}
 		
-		return foodItem;
+		return itemRepo.save(foodItem);
 	}
 
 	@Override

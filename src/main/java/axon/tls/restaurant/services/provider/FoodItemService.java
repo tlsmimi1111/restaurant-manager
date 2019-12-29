@@ -3,9 +3,10 @@ package axon.tls.restaurant.services.provider;
 import java.util.Collection;
 
 import axon.tls.restaurant.entities.FoodItem;
+import axon.tls.restaurant.models.FoodItemRequest;
 
 public interface FoodItemService {
-	public abstract FoodItem createFoodItem(FoodItem FoodItem);
+	public abstract FoodItem createFoodItem(FoodItem FoodItem,Long restaurantId);
 	  
 	  public abstract FoodItem updateFoodItem(Long id, FoodItem FoodItem);
 	  

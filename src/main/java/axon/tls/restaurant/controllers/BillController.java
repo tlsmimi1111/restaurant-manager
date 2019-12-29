@@ -82,9 +82,15 @@ public class BillController {
 	}
 	
 	@GetMapping(value = ApiConfig.URI_GET_BILL_BY_DESK_ID)
-	public ResponseEntity getBillsByBillId(@RequestParam(value = "deskId") Long deskId) {
+	public ResponseEntity getBillsByDeskId(@RequestParam(value = "deskId") Long deskId) {
 		MappingJacksonValue bill = this.filterData(billService.getBillByDeskId(deskId));
 		return new ResponseEntity(bill,HttpStatus.OK);
+	}
+	
+	@GetMapping(value =ApiConfig.URI_GET_BILL_BY_YEAR_AND_RESTAURANT_ID)
+	public ResponseEntity getAllPaidBillByRestaurantIdAndYear(@PathVariable(value ="restaurantId") Long restaurantId,@PathVariable(value="year") Integer year) {
+		MappingJacksonValue bills = this.filterData(billService.getAllPaidBillByYearAndRestaurantId(year, restaurantId));
+		return new ResponseEntity(bills,HttpStatus.OK);
 	}
 	
 	private MappingJacksonValue filterData(Object billService) {

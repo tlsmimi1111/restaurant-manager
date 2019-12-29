@@ -19,14 +19,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.ec2.model.Storage;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.sun.istack.Nullable;
 
 import axon.tls.restaurant.config.ApiConfig;
 import axon.tls.restaurant.config.Constants;
 import axon.tls.restaurant.entities.FoodItem;
+import axon.tls.restaurant.models.FoodItemRequest;
+import axon.tls.restaurant.services.StorageService;
 import axon.tls.restaurant.services.provider.FoodItemService;
 
 @CrossOrigin
@@ -43,12 +48,45 @@ public class FoodItemController {
 	@Autowired 
 	FoodItemService itemService;
 	
-	@PostMapping(value = ApiConfig.URI_ITEM_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity createFoodItem(@RequestBody @Valid FoodItem foodItemRequest) {
-		MappingJacksonValue newFoodItem =  this.filterData(itemService.createFoodItem(foodItemRequest));
+	@Autowired
+	StorageService storageService;
+	
+	@PostMapping(value = ApiConfig.URI_ITEM_CREATE)
+	public ResponseEntity createFoodItem(@RequestParam(value="file",required=false) MultipartFile file,@RequestParam("restaurantId") String restaurantId,@RequestParam("price") String price,@RequestParam("name") String name) {
+		FoodItem item = new FoodItem();
+		item.setPrice(Integer.parseInt(price));
+		item.setName(name);
+		
+		if(file != null) {
+			String imgUrl = storageService.saveFile(file);
+			item.setImage_url(imgUrl);
+		}
+		
+		MappingJacksonValue newFoodItem =  this.filterData(itemService.createFoodItem(item,Long.parseLong(restaurantId)));
 		return new ResponseEntity(newFoodItem, HttpStatus.CREATED);
 	}
 
+	@PatchMapping(value = ApiConfig.URI_ITEM_UPDATE)
+	public ResponseEntity updateFoodItem(@PathVariable(value = "itemId") Long id, @RequestParam(value="file",required=false) MultipartFile file,@RequestParam("price") String price,@RequestParam("name") String name) {
+		FoodItem item = new FoodItem();
+		item.setPrice(Integer.parseInt(price));
+		item.setName(name);
+		
+		if(file != null) {
+			String imgUrl = storageService.saveFile(file);
+			item.setImage_url(imgUrl);
+		}
+		
+		FoodItem foodItem = itemService.updateFoodItem(id, item);
+
+		if (foodItem != null) {
+			MappingJacksonValue response = this.filterData(foodItem);
+			return new ResponseEntity(response, HttpStatus.OK);
+		} else {
+			return new ResponseEntity("FoodItem is not updated successfully", HttpStatus.NOT_MODIFIED);
+		}
+	}
+	
 	@GetMapping(value = ApiConfig.URI_ITEM_GET_ONE)
 	public ResponseEntity getFoodItemById(@PathVariable(value = "itemId") Long foodItemId) {
 		MappingJacksonValue foodItem = this.filterData(itemService.getFoodItemById(foodItemId));
@@ -66,17 +104,7 @@ public class FoodItemController {
 		}
 	}
 
-	@PatchMapping(value = ApiConfig.URI_ITEM_UPDATE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity updateFoodItem(@PathVariable(value = "itemId") Long id, @RequestBody FoodItem foodItemRequest) {
-		FoodItem foodItem = itemService.updateFoodItem(id, foodItemRequest);
 
-		if (foodItem != null) {
-			MappingJacksonValue response = this.filterData(foodItem);
-			return new ResponseEntity(response, HttpStatus.OK);
-		} else {
-			return new ResponseEntity("FoodItem is not updated successfully", HttpStatus.NOT_MODIFIED);
-		}
-	}
 	
 	@GetMapping(value = "/foodItems/restaurantId")
 	public ResponseEntity getFoodItemsByRestaurantId(@RequestParam(value = "restaurantId") Long restaurantId) {

@@ -62,6 +62,7 @@ public class DeskController {
 		this.keptFloorFields.add("size");
 		this.keptFloorFields.add("name");
 		this.keptFloorFields.add("id");
+		this.keptFloorFields.add("restaurant");
 	}
 
 	@Autowired
@@ -127,8 +128,11 @@ public class DeskController {
 		MappingJacksonValue wrapper = new MappingJacksonValue(DeskService);
 		FilterProvider filterProvider = new SimpleFilterProvider()
 				.addFilter(Constants.DESK_FILTER, SimpleBeanPropertyFilter.serializeAll())
-				.addFilter(Constants.BILL_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id"))
-				.addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptFloorFields));
+				.addFilter(Constants.BILL_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id","rowItems","total","state"))
+				.addFilter(Constants.ROW_ITEM_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id","item","quantity"))
+				.addFilter(Constants.FOOD_ITEM_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept("id","name","price"))
+				.addFilter(Constants.FLOOR_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptFloorFields))
+				.addFilter(Constants.RESTAURANT_FILTER, SimpleBeanPropertyFilter.filterOutAllExcept(this.keptRestaurantFields));
 		wrapper.setFilters(filterProvider);
 		return wrapper;
 	}
